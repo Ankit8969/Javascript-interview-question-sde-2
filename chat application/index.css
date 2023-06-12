@@ -1,0 +1,126 @@
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    background-color: lightblue;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.chatBox{
+    width: 70%;
+    height: 80vh;
+    border-radius: 20px;
+    background-color: skyblue;
+    overflow: hidden;
+}
+
+.chatBox .chatSection{
+    display: grid;
+    grid-template-columns: 350px auto;
+    grid-template-rows: 80vh 80vh;
+}
+.scrollableContact{
+    height: 80vh;
+    overflow-y: scroll;
+}
+
+.scrollableContact::-webkit-scrollbar {
+    width: 8px;   /* vertical scrollbar width */
+    height: 12px; /* horizontal scrollbar height */
+}
+
+.scrollableContact::-webkit-scrollbar-button {
+    height: 100px; /* vertical scrollbar height */
+}
+
+.chatSection .contactSection{
+    background-color: rgb(17,27,33);
+    opacity: 0.9;
+    overflow: hidden;
+}
+
+.chatSection .messageSection{
+    background-color: rgb(17,27,33);
+    opacity: 0.7;
+}
+.contactSearchInputBox{
+    width: 340px;
+    height: 40px;
+    background-color: rgb(48, 48, 48);
+    z-index: 99;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    margin: 5px;
+    position: sticky;
+    top: 0;
+    border-top-left-radius: 5px;
+    padding-left: 10px;
+    box-sizing: content-box;
+}
+
+/* user Contact Styling */
+.mainContactBox{
+    display: grid;
+    grid-template-columns: 60px auto;
+    grid-template-rows: 60px 60px;
+    padding:10px;
+    border-bottom: 1px solid grey;
+    height: 60px;
+    cursor: pointer;
+}
+.mainContactBox:hover{
+    background-color: rgb(42,57,66);
+}
+.userImg{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.userDetailsBox{
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.userName{
+    font-weight: bold;
+    color: white;
+}
+.userLastMessage{
+    color: grey;
+    margin-top: 5px;
+}
+.userLogoBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* styling of message section */
+.messageText{
+    background-color: rgb(1,92,75);
+    color: white;
+    min-width: 20px;
+    display: inline-block;
+    padding:5px 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+.scrollableMessage, .messageSection{
+    height: 80vh; 
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column-reverse;
+}
+.sendMessage{
+    height: 40px;
+    padding-left: 10px;
+    background-color: rgb(42,57,66);
+    color: white;
+    outline: none;
+}
