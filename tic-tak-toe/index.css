@@ -1,0 +1,28 @@
+.tic-tac-toe {
+    text-align: center;
+  }
+  
+  .board {
+    display: flex;
+    flex-wrap: wrap;
+    width: 240px;
+    margin: 0 auto;
+    border: 2px solid #333;
+  }
+  
+  .cell {
+    box-sizing: border-box;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+  button {
+    margin-top: 20px;
+  }
+  
