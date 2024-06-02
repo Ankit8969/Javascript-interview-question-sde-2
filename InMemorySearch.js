@@ -1,6 +1,5 @@
 /*
 can we implement this in JS
-ChatGPT
 Yes, you can implement an in-memory search engine in JavaScript. While it might not be as sophisticated or efficient as dedicated 
 search engines like Elasticsearch or Redis, it can be quite effective for smaller datasets and specific use cases. Here's a simple example 
 of how you can create an in-memory search engine using JavaScript:
