@@ -45,3 +45,43 @@ const proxy = new Proxy(fontSizes, proxyOptions);
 console.log(proxy.xxl);
 console.log(proxy.xl);
 
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////
+///// example - 2
+
+
+const handler = {
+  get: function(target, prop, receiver) {
+    console.log(`Property ${prop} was accessed`);
+    return Reflect.get(...arguments);
+  },
+  set: function(target, prop, value, receiver) {
+    console.log(`Property ${prop} was set to ${value}`);
+    return Reflect.set(...arguments);
+  },
+  deleteProperty: function(target, prop) {
+    console.log(`Property ${prop} was deleted`);
+    return Reflect.deleteProperty(target, prop);
+  }
+};
+
+const target = { name: 'Alice', age: 30 };
+const proxy = new Proxy(target, handler);
+
+// Interactions with the proxy
+console.log(proxy.name); // Logs: Property name was accessed
+proxy.age = 31; // Logs: Property age was set to 31
+delete proxy.name; // Logs: Property name was deleted
+
+console.log(proxy);
+
+
+
