@@ -1,54 +1,49 @@
 
+/*
+Three thing we can do in pubsub
+subscribe
+publish
+un-subscribe
+*/
+
+
 class PubSub {
-  constructor() {
-    this.subscribers = [];// In this array we will store the function only
+  constructor(){
+    this.publisher = {};
+  }
+  subscribe(key, value){
+    if (this.publisher.hasOwnProperty(key))
+      this.publisher[key].push(value);
+    else  
+      this.publisher[key] = [value];
   }
 
-  subscribe(subscriber) {
-    if (typeof subscriber !== 'function')
-      throw new Error('Subscriber should be function')
-    // adding to the subscriber method
-    this.subscribers.push(subscriber);
+  publish(key, payload) {
+    if (this.publisher.hasOwnProperty(key)) {
+      this.publisher[key].forEach((listener) => {
+        listener(payload);
+      })
+    }
   }
 
-  unsubscribe(subscriber) {
-    if (typeof subscriber !== 'function')
-      throw new Error('Subscriber should be function')
-    // filter out 
-    this.subscribers = this.subscribers.filter((item) => item !== subscriber);
+  unsubscribe(key, method) {
+    if (this.publisher.hasOwnProperty(key)) {
+      this.publisher[key] = this.publisher[key].filter((item) => item != method)
+    }
   }
-
-  publish(payload) {
-    this.subscribers.forEach(subscriber => subscriber(payload))
-  }
-
 }
 
-let instance = new PubSub();
-instance.subscribe((payload)=>{
-  console.log("First: ", payload);
-})
+const printMessage = (msg) =>{
+  console.log("Listening on " + msg)
+}
 
-instance.subscribe((payload)=>{
-  console.log("Second: ", payload);
-})
+const printName = (msg) =>{
+  console.log("Prining Name " + msg)
+}
+const pubsub = new PubSub();
 
-instance.subscribe((payload)=>{
-  console.log("Third: ", payload);
-})
+pubsub.subscribe('message', printMessage);
 
-instance.publish('Ankit');
-/*
-First:  Ankit
-Second: Ankit
-Third: Ankit
-*/
+pubsub.subscribe('message', printName);
 
-instance.unsubscribe(instance.subscribers[0])
-
-instance.publish('Sonu')
-/*
-Second: Sonu
-Third: Sonu
-*/
-
+pubsub.publish('message', "Ankit")
