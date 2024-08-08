@@ -1,29 +1,32 @@
-const url = "https://jsonplaceholder.typicode.com/comments";
 
-const timeout = 100;
+const URL = 'https://jsonplaceholder.typicode.com/photos';
 
-function fetchWithTimeout(url, options, timeout) {
-  const fetchPromise = fetch(url, options);
-  const timeoutPromise = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject(new Error("Request timed out"));
-    }, timeout);
-  });
-  console.log(Promise.race([fetchPromise, timeoutPromise]))
-  return Promise.race([fetchPromise, timeoutPromise]);
+function fetchWithTimeout(url, timeout) {
+  return new Promise((resolve, reject) => {
+    const prom1 = fetch(url).then(response => response.json());
+    const prom2 = new Promise((resolve, reject) => {
+      const timer = setTimeout(()=>{
+        reject(new Error(`Request timed out after ${timeout}ms`));
+      },timeout)
+
+      // clearing the timer if the prom1 is resolved first;
+      prom1.finally(()=> {
+        console.warn("Clearing the timer")
+        clearTimeout(timer)
+      });
+    })
+    const promArr = [prom1, prom2];
+    Promise.race(promArr).then((res) =>{
+      resolve(res);
+    }).catch((err) => {
+      reject(err);
+    })
+  })
 }
 
-fetchWithTimeout(
-  url,
-  {
-    method: "GET"
-  },
-  timeout
-)
-  .then((response) => response.json())
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((error) => {
-    console.log("Getting Rejected ");
-  });
+fetchWithTimeout(URL, 300).then((res) => {
+  console.log(res);
+}).catch((err) => {
+  console.warn(err);
+})
+
