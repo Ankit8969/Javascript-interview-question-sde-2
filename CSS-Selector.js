@@ -1,4 +1,5 @@
 // run the below script and when you will click on any element you will get the path.
+
 class CssSelector {
   constructor(){
     this.handleCurrentSelectedElement = 
@@ -21,10 +22,6 @@ class CssSelector {
     const parentElement = element.parentElement;
     const allItems = Array.from(parentElement.children);
     const index = allItems.indexOf(element);
-    
-    // Access the element using nth-child
-    const nthChildElement = parentElement.querySelector(`:nth-child(${index + 1})`);
-
     // now returning the path of that selected element, 
     // respect to the parent
     return `${element.tagName.toLowerCase()}:nth-child(${index+1})`;
