@@ -6,7 +6,7 @@ So, In this type of case we should think about Proxy.
 */
 
 
-// I want to update the user these are deprecated, and I don't want to intercept the original object.
+// I want to update the fontSizes which are deprecated, and I don't want to intercept the original object.
 const deprecatedFontSizes = {
   xxl: {
     currentValue: "xxl",
