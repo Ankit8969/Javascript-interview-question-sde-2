@@ -1,6 +1,7 @@
 List Virtualization
 
 https://www.patterns.dev/vanilla/virtual-lists/
+https://www.patterns.dev/vanilla/preload
 
 It is a technique, suppose we have 10K data in the list,but if we want to show all the data at once, 
   our webpage might got stuck because of too much data in the UI
