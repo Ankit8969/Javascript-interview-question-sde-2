@@ -42,3 +42,18 @@ Once the HTML is loaded in the browser, JavaScript takes over to "hydrate" the p
 - Possibly injecting dynamic content that wasn’t initially rendered by the server.
 
 Essentially, hydration makes the page interactive by attaching JavaScript behavior to the static HTML content.
+
+# Hydration Strategies
+
+## Selective Hydration
+
+Selective hydration involves only hydrating parts of the page that need interactivity, rather than the entire page. Instead of hydrating the entire server-rendered HTML all at once, selective hydration targets specific components or regions of the page. 
+
+- **Example**: Interactive components like buttons or forms are hydrated first, while static content remains unhydrated until necessary.
+
+## Progressive Hydration
+
+Progressive hydration refers to a strategy where the hydration of a page is done in stages or progressively, based on the importance or visibility of content.
+
+- **How It Works**: Hydration happens incrementally as the user interacts with the page or as certain conditions are met. For instance, components that are in the viewport or about to come into view are hydrated first. The rest of the page is hydrated as needed.
+
