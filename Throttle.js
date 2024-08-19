@@ -3,21 +3,17 @@ const defaultText = document.getElementById('default');
 const debounceText = document.getElementById('debounce');
 let count = 0;
 
-function throttle(func, delay) {
-  let timer = null;
-  let lastTyped = Date.now();
-
+function throttle(fn, delay) {
+  let lastTimer = Date.now();
+  let timeId = 0;
   return function(...args) {
-    let currentTimeLapsed = Date.now() - lastTyped;
-    if (currentTimeLapsed > delay) {
-      func(...args);
-      lastTyped = Date.now();
-    }else {
-      clearTimeout(timer);
-      timer = setTimeout(()=>{
-        func(...args);
-        lastTyped = Date.now();
-      }, delay - currentTimeLapsed);
+    const timeDiff = Date.now() - lastTimer;
+    if (timeDiff > delay) {
+      fn(...args);
+      lastTimer = Date.now();
+    } else {
+      clearTimeout(timeId);
+      timeId = setTimeout(fn, delay - timeDiff, ...args)
     }
   }
 }
