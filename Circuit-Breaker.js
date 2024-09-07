@@ -21,68 +21,56 @@ Half-Open to Closed: If the test requests succeed, the circuit breaker resets to
 
 */
 
+
+
 class CircuitBreaker {
-  constructor({ failureThreshold, recoveryTimeout }) {
-    this.failureThreshold = failureThreshold;
-    this.recoveryTimeout = recoveryTimeout;
-    this.failures = 0;
-    this.state = 'CLOSED';
+  constructor(maxRetry, nextRetry) {
+    this.state = "CLOSE";
+    this.thresholdRetry = maxRetry;
+    this.retryCount = 0;
     this.nextAttempt = Date.now();
+    this.recoveryTimeout = nextRetry;
   }
 
   async call(action) {
-    if (this.state === 'OPEN') {
+    if (this.state === "OPEN") {
       if (Date.now() > this.nextAttempt) {
-        this.state = 'HALF-OPEN';
-      } else {
-        throw new Error('Circuit is open');
+        this.state = "HALF_OPEN";
+      }else{
+        throw "Circuit is open";
       }
     }
 
-    try {
+    try{
       const result = await action();
       this.reset();
       return result;
-    } catch (error) {
+    }catch(err){
       this.fail();
-      throw error;
+      throw err;
     }
   }
 
-  reset() {
-    this.failures = 0;
-    this.state = 'CLOSED';
+  reset(){
+    this.state = "CLOSE";
+    this.retryCount = 0;
   }
 
   fail() {
-    this.failures += 1;
-    if (this.failures >= this.failureThreshold) {
+    if (this.state === 'HALF_OPEN') {
+      // Transition directly to OPEN without incrementing retryCount
       this.state = 'OPEN';
       this.nextAttempt = Date.now() + this.recoveryTimeout;
+    } else {
+      this.retryCount++;
+      if (this.retryCount >= this.thresholdRetry) {
+        this.state = 'OPEN';
+        this.nextAttempt = Date.now() + this.recoveryTimeout;
+      }
     }
   }
+
 }
 
-// Usage
-const breaker = new CircuitBreaker({ failureThreshold: 3, recoveryTimeout: 5000 });
+const circuitBreaker = new CircuitBreaker(4, 500);
 
-async function makeRequest() {
-  // Simulate a request that may fail
-  if (Math.random() < 0.7) {
-    throw new Error('Request failed');
-  }
-  return 'Success';
-}
-
-async function main() {
-  for (let i = 0; i < 10; i++) {
-    try {
-      const result = await breaker.call(makeRequest);
-      console.log(result);
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-}
-
-main();
