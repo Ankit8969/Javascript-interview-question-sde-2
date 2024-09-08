@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const VirtualizationList = ({ data, height, width, rowHeight, fetchData }) => {
+const InfiniteScroll = ({ data, height, width, rowHeight, fetchData }) => {
   const [currList, setCurrList] = useState(data);
   const [isLoading, setIsLoading] = useState(false);
   const selectAllItems = useRef(null);
@@ -49,4 +49,4 @@ const VirtualizationList = ({ data, height, width, rowHeight, fetchData }) => {
   );
 };
 
-export default VirtualizationList;
+export default InfiniteScroll;
