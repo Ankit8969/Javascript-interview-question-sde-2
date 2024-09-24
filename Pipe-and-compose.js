@@ -1,3 +1,9 @@
+/*
+In JavaScript, compose and pipe are two functional programming concepts that 
+allow functions to be combined and executed in a specific order.
+
+*/
+
 // Pipe and Compose 
 const add2 = (x) => x + 2;
 const subtract1 = (x) => x - 1;
