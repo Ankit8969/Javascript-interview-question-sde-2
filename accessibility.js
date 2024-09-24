@@ -4,4 +4,10 @@ Keyboard Navigation
 Screenreader support
 
 
-color contrast, user interface zoom support, keyboard interaction models, and screenreader support
+color contrast, 
+user interface 
+zoom support, 
+keyboard 
+interaction models, 
+and screenreader support
+
