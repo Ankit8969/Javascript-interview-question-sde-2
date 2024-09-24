@@ -2,6 +2,10 @@
 In JavaScript, compose and pipe are two functional programming concepts that 
 allow functions to be combined and executed in a specific order.
 
+Conclusion:
+Compose is useful when you want to apply functions from right to left, usually seen in functional programming paradigms.
+Pipe is the opposite, where functions are applied from left to right, and often feels more intuitive in JavaScript.
+
 */
 
 // Pipe and Compose 
