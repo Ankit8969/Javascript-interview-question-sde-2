@@ -1,49 +1,38 @@
 
-function fetchDetails() {
+
+function getResult(){
   return new Promise((resolve, reject) => {
-    const x = Math.random() * 10; // >=0 and < 10
-    if (x < 5) {
-      // success 
-      resolve("DONE")
-    }else {
-      reject("Failed");
-    }
+    let randomNum = parseInt(Math.random()*10);
+    if (randomNum < 4)
+        resolve("DONE");
+    else 
+      reject("FAiled!")
   })
 }
 
-async function retryPromise(promise, nthTry) {
+
+async function fetchAutoRetry(getData, retryCount) {
   try {
-    const data = await promise();
-    return data;
+    const res = await getData();
+    console.log("RES: ", retryCount , res);
+    return res;
   }catch(err) {
-    if (nthTry === 0) {
-      return Promise.reject(err);
+    console.log("Err: ", retryCount , err);
+    if (retryCount === 0){
+      return "Failed to get the data even, after retrying";
+    }else {
+      return fetchAutoRetry(getData, retryCount - 1);
     }
-    return retryPromise(promise, nthTry - 1);
   }
 }
 
-// let's suppose we can call 3 times;
-async function fetchDataWithAutoRetry() {
-  const prom1 = retryPromise(fetchDetails, 5);
-  const prom2 = retryPromise(fetchDetails, 5);
-  const prom3 = retryPromise(fetchDetails, 5);
-  const prom4 = retryPromise(fetchDetails, 5);
+(async ()=>{
+  console.log("Started fetching..............")
+  let response = await fetchAutoRetry(getResult, 5);
+  console.log(response);
 
-  try {
-    const promiseArr = [prom1,prom2,prom3,prom4]
-    const result = await Promise.all(promiseArr);
-    console.log(result);
-  }catch(err) {
-    console.error(err);
-  }
-}
-
-fetchDataWithAutoRetry();
-
-
-
-
+  console.log("End fetching........")
+})();
 
 
 
