@@ -1,3 +1,6 @@
+## Syntax to write in .md
+<img width="724" alt="image" src="https://github.com/user-attachments/assets/8c9431ba-f74c-45d6-8166-ae9700519aeb">
+
 ![WhatsApp Image 2024-08-21 at 10 32 29 AM](https://github.com/user-attachments/assets/1da92023-acce-40ca-a12f-dc94575fe457)
 
 https://leetcode.com/discuss/interview-question/742791/front-end-interview-questions
