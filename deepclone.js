@@ -24,27 +24,29 @@ const person = {
 
 
 function deepClone(obj) {
-  if (typeof obj !== 'object' || Array.isArray(obj)) 
-      return obj;
+  if (typeof obj === 'string') return obj;
+  if (typeof obj === 'number') return obj;
+  if (typeof obj === 'boolean') return obj;
 
-  let newObj = {};
-  const keys = Object.keys(obj);
-  keys.forEach((key) => {
-    newObj = {
-      ...newObj,
-      [key]: deepClone(obj[key])
+  if (Array.isArray(obj)) {
+    const res = obj.map((item) => deepClone(item));
+    return res;
+  }
+
+  if (typeof obj === 'object') {
+    let result = {};
+    let keys = Object.keys(obj);
+    for (let i=0;i<keys.length;i++) {
+      result = {
+        ...result,
+        [keys[i]]: deepClone(obj[keys[i]])
+      }
     }
-  })
-  return newObj;
+    return result;
+  }
 }
 
-
-let obj = deepClone(person);
-
-obj.address.street = 'ankit';
-console.log(person);
-console.log(obj);
-
-
-
+let temp = deepClone(person);
+// temp.name = "res";
+console.log(temp);
 
