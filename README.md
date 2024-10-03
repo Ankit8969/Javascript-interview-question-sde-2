@@ -66,3 +66,46 @@ https://leetcode.com/discuss/interview-experience/2072679/livspace-interview-que
 20. **How would you handle deep updates in nested state using React without causing performance bottlenecks?**
 
 
+
+# Performance related question
+
+- If we are dealing with a user-intensive application, it's good to use lazy loading techniques for better performance.
+- To prevent blocking of the UI thread, we should consider using Web Workers. Remember about its drawbacks.
+- For responsive design, consider using a mobile-first approach with media queries.
+- If the system requires a complex UI with a lot of user interaction, consider using a frontend framework like React, Angular, or Vue.
+- If you need to handle and maintain the state of the application efficiently, consider using state management libraries like Redux or Mobx.
+- To make the website accessible, ensure proper use of ARIA attributes and semantic HTML.
+- If the application requires real-time data updates, consider using Websockets or Server-Sent Events.
+- If the system requires seamless navigation between different parts of the application, consider using client-side routing.
+- For optimizing large lists or tables in the UI, consider using techniques like windowing.
+- To deal with form validation and data collection, consider using libraries like Formik or react-hook-form.
+- If the system has a component-based architecture, ensure proper component composition.
+- If the system needs to store data in the client-side, we should consider using Cookies, Local Storage, or IndexedDB based on the use case.
+- To reduce the initial load time of the application, implement code splitting.
+- If the application needs to work offline, implement a service worker and build a Progressive Web App (PWA).
+- For efficient error handling, use a centralized error handling system.
+- When dealing with APIs, consider using GraphQL for efficient data retrieval.
+- If the system requires frequent style changes based on props, consider CSS-in-JS libraries.
+- If the system has multiple similar components, consider using higher-order components or render props for code reusability.
+- If the system needs to be SEO-friendly, implement server-side rendering (SSR) or pre-rendering.
+- For large scale applications, use a monorepo structure for easy package management.
+- When dealing with asynchronous data, consider using Promises or async/await for better code readability and error handling.
+- For handling complex animations, consider using libraries like Framer Motion or React Spring.
+- If the application needs to support multiple themes, consider context API and CSS variables.
+- If the application needs to support internationalization, consider libraries like i18next.
+- To ensure the performance of the application, make sure to use the browser's Performance API.
+- For testing components and business logic, consider using libraries like Jest and React Testing Library.
+- To enforce code style and prevent bugs, consider using linters and formatters like ESLint and Prettier.
+- To ensure your frontend is accessible to all users, you should follow WCAG guidelines and use tools for checking accessibility compliance.
+- For maintaining code quality and enforcing coding standards, use static type checkers like TypeScript and linters such as ESLint.
+- Consider implementing state management libraries like Redux or Context API for predictable state management in complex applications with many components
+- If your application deals with real-time data, consider using WebSockets or libraries such as Socket.IO for real-time, bidirectional communication between the client and the server.
+- For managing side effects in your application, libraries like Redux-Thunk or Redux-Saga can be considered.
+- If your application requires routing, libraries like React-Router can help manage different views for your app.
+  
+
+
+
+
+
+
