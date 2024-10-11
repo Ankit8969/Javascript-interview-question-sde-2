@@ -148,6 +148,93 @@ export default Modal;
 
 ```
 
+## Profiler
+
+The React Profiler is a tool that helps you measure the performance of your React components. It enables you to record the "render" timings of components to identify performance bottlenecks or unnecessary re-renders. With React Profiler, you can monitor how often a component renders and the time it takes for these renders to happen
+
+## Key Features:
+- Measure Rendering Time: It tracks how long React spends rendering a component and its descendants.
+- Identify Re-renders: It helps you find unnecessary re-renders by showing how many times a component renders.
+- Track Render Phases: The profiler provides information about whether the render was part of a commit or a layout phase.
+- Optimize Performance: It helps identify components that slow down the app and lets you optimize performance accordingly.
+
+
+```
+import React, { Profiler } from 'react';
+
+const onRenderCallback = (
+  id, // the "id" prop of the Profiler tree that has just committed
+  phase, // either "mount" (for initial mount) or "update" (for re-renders)
+  actualDuration, // time spent rendering the committed update
+  baseDuration, // estimated time to render the entire subtree without memoization
+  startTime, // when React began rendering this update
+  commitTime, // when React committed this update
+  interactions // the interactions that were part of this render
+) => {
+  console.log({ id, phase, actualDuration, baseDuration, startTime, commitTime, interactions });
+};
+
+const App = () => (
+  <Profiler id="App" onRender={onRenderCallback}>
+    <MyComponent />
+  </Profiler>
+);
+
+export default App;
+
+```
+
+```
+const MyApp = () => {
+  return (
+    <Profiler id="MyApp" onRender={onRenderCallback}>
+      <MainComponent />
+    </Profiler>
+  );
+};
+
+const onRenderCallback = (id, phase, actualDuration) => {
+  console.log(`Profiler ID: ${id}, Phase: ${phase}, Render Time: ${actualDuration}`);
+};
+
+```
+
+## Synthetic Event
+- In React, a Synthetic Event is a cross-browser wrapper around the native browser events, providing a consistent interface for handling events across different browsers
+
+## Common Synthetic Event Types:
+React synthetic events are similar to DOM events, such as:
+- onClick
+- onChange
+- onMouseEnter
+- onKeyDown
+- onSubmit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
