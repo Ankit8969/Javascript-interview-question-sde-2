@@ -36,18 +36,15 @@ const listItems = numbers.map((number) =>
 ```
 
 ## Controlled Components
-
 - In HTML, form elements such as <input>, <textarea>, and <select> typically maintain their own state and update it based on user input.
 - So, to handle these , we can use "useState" hoooks, to maintain the state, such that all these are totally controlled by react, when ever user type any thing.
-
 - Whenever we have to deal with forms in react either we can go with Controlled or Un-Controlled method
-  or 
 - We can use some other library like "Formik" to take care all the "setState" for every input.
+
+
 
 ## what do you understand by Accessibility ?
 - Web accessibility (also referred to as a11y) is the design and creation of websites that can be used by everyone.
-
-
 
 
 
