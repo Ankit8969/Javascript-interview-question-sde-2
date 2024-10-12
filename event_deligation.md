@@ -1,4 +1,4 @@
-# Event Delivation
+# Event Deligation
 Event delegation is a technique in JavaScript where a single event listener is attached to a 
 parent element to manage events triggered by its child elements. Instead of attaching multiple event 
 listeners to each child, we delegate the event handling to a common ancestor. This approach is especially 
