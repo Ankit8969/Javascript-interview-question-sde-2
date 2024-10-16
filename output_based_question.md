@@ -744,7 +744,7 @@ Start
 End
 2
 
-because Event, in the promise if any synchronous code is present It will execute first.
+because Even, in the promise if any synchronous code is present It will execute first.
 ```
 
 
