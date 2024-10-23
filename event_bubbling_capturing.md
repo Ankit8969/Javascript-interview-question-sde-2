@@ -1,3 +1,4 @@
+# Event bubbling and capturing
 - In JavaScript, event bubbling and event capturing are two phases of event propagation in the DOM. Event propagation 
 determines how events flow through the DOM when a user interacts with elements.
   - Event Bubbling: The event starts from the target element and propagates up through its ancestors (parent, grandparent, etc.).
