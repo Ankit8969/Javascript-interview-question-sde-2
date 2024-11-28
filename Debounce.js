@@ -21,34 +21,56 @@
 
 
 
+let inputBox = document.querySelector('input')
 
-// selecting the input box
-let inputBox = document.querySelector('input');
-let debounceP = document.querySelector('.debounce');
-let debounceN = document.querySelector('.normal');
-
-function normalFunction(e) {
-    console.log("Normal function")
-    debounceN.innerHTML = e.target.value;
+function printNormal(e){
+  let p = document.querySelector('.normal');
+  p.innerHTML = e.target.value;
 }
 
-// I need to taking care of the last typed time 
-// to handle this I have to use closure
+function printDebounce(e){
+  let p = document.querySelector('.debounce');
+  p.innerHTML = e.target.value;
+}
+function printThrottle(e){
+  let p = document.querySelector('.throttle');
+  p.innerHTML = e.target.value;
+}
 
-function updatedFunction() {
-    let timer;
-    return function(e) {
-        const { value } = e.target;
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            console.log("Debounced Function")
-            debounceP.innerHTML = value;
-        }, 500)
+function debounce(fn, delay) {
+  let timer = 0;
+  return function(...args){
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.call(null, ...args);
+    }, delay);
+  }
+}
+
+function throttle(fn, delay) {
+  let flag = true;
+  return function(...args) {
+    if (flag) {
+      fn.call(null, ...args);
+      flag = false;
+      setTimeout(() => flag = true, delay);
     }
+  }
 }
 
-let enhancedDebounce = updatedFunction();
-inputBox.addEventListener('keyup', (e) => {
-    normalFunction(e)
-    enhancedDebounce(e);
+
+
+let debouncedFun = debounce(printDebounce, 1000)
+let throttleFun = throttle(printThrottle, 1000);
+
+inputBox.addEventListener('keydown', (e) => {
+  printNormal(e);
+  debouncedFun(e);
+  throttleFun(e);
 })
+
+
+
+
+
+
