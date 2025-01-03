@@ -161,3 +161,37 @@ Object.setPrototypeOf(user, {
 // Check the prototype of scores now
 console.log(user)
 ```
+
+
+
+## Protype Inheritance
+```
+
+function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.makeSound = function () {
+  console.log(`${this.name} makes a sound`);
+};
+
+function Dog(name, breed) {
+  Animal.call(this, name);
+  this.breed = breed;
+}
+
+Dog.prototype = Animal.prototype;
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.bark = function () {
+  console.log(`${this.name} says Woof!`);
+};
+
+const husky = new Dog("Husky", "Siberian Husky");
+
+husky.makeSound();
+husky.bark();
+
+```
+
+
