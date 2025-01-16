@@ -1,27 +1,21 @@
 
 function cancelableTimeout(timer) {
-    const timeout = {
-        id: null,
-        cancel: function () {
-            if (this.id !== null) {
-                console.log("Clear the timer");
-                clearTimeout(this.id);
-                this.id = null; 
-            }
-        },
-    };
+  let cancelID = null;
+  cancelID = setTimeout(() => {
+    console.log('Settimeout called');
+    cancelID = null;
+  }, timer);
 
-    timeout.id = setTimeout(() => {
-        console.log("Print after timeout");
-        timeout.id = null; 
-    }, timer);
-
-    return timeout;
+  return () => {
+    if(cancelID) {
+      console.log("Clearing the timer...");
+      clearTimeout(cancelID);
+    }
+  }
 }
 
-let temp = cancelableTimeout(4000);
-
+let cancelFun = cancelableTimeout(3000);
 
 setTimeout(() => {
-    temp.cancel();
-}, 6000);
+  cancelFun();
+}, 2000)
