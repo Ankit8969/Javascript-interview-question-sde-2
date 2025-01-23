@@ -1,4 +1,4 @@
-
+```
 const URL = "https://jsonplaceholder.typicode.com/photos";
 
 function fetchTimeout(URL, timer) {
@@ -14,3 +14,4 @@ fetchTimeout(URL, 130).then((res) => {
 }).catch((err) => {
   console.log("Error fetching ", err);
 })
+```
