@@ -416,6 +416,39 @@ console.log(func); // 5
 
 // delete won't affect because it only works with object.
 ```
+```
+
+const obj = {
+  name: "Ankit",
+  getDetails1: function(){
+      console.log(this.name);  # Refers - obj
+  },
+  getDetails2: ()=>{
+      console.log(this); # Refer - window
+  },
+  add: {
+      name:"Bangalore",
+      getAdd: function(){
+          console.log(this.name); // Refer -> add obj
+          const getAdd2= ()=>{
+            console.log(this); // Refer to add
+          }
+          getAdd2();
+      },
+      getAdd2: ()=>{
+        console.log(this); // Refer to Window
+      }
+  }
+}
+
+obj.getDetails1();
+obj.getDetails2();
+
+obj.add.getAdd();
+obj.add.getAdd2();
+```
+
+
 
 ## Object iteration
 
