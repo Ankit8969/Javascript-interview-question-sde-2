@@ -7,6 +7,35 @@ const controller = new AbortController(); // Create an instance
 const signal = controller.signal; // Get the signal object
 ```
 
+## Important Example
+After every request if the user will type it will cancel the last call, if the fetching is still going on.
+
+```
+
+function fetchData(){
+    let controller;
+    return function(text) {
+        if(controller) {
+            controller.abort();
+            console.log("controller aborted!");
+        }
+        controller = new AbortController(); // Create a new controller for this request
+        const signal = controller.signal;
+        fetch("https://jsonplaceholder.typicode.com/posts", { signal }).catch(err =>
+          console.log("First fetch:", err.name)
+        );
+    }
+}
+
+
+const input = document.querySelector("input");
+let abortFetch = fetchData();
+input.addEventListener("keyup", (event) => {
+    const text = event.target.value;    
+    abortFetch(text);
+})
+```
+
 
 ## Example - 1
 ```
