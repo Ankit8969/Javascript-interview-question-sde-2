@@ -1,42 +1,46 @@
-// Cached api call with expiry time
-const URL = 'https://jsonplaceholder.typicode.com/photos';
+function cachedApiCall(timer) {
+  let lastCallTime = 0; // Stores the last successful API call time
+  let cachedRes = null; // Stores the cached response
 
-function cachedApiCall(time) {
-  let cachedRes = {};
-  let lastTime = 0;
-  return async function(url) {
-    const currDiff = new Date().getTime() - lastTime;
-    if (currDiff < time) {
-      console.log("Cached response")
+  return async function (URL) {
+    const currentTime = Date.now();
+
+    if (currentTime - lastCallTime < timer && cachedRes) {
+      console.log("Cached Response:");
       return cachedRes;
     }
-    const data = await fetch(url).then((res)=> res.json()).then((res) => res);
-    lastTime = new Date().getTime();
-    console.log("Freshed response")
-    cachedRes = data;
-    return data;
-  }
+
+    try {
+      let fetchRes = await fetch(URL);
+      let res = await fetchRes.json();
+      cachedRes = res;
+      lastCallTime = currentTime; // Update the time when API is called
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return cachedRes; // Return last cached response on error
+    }
+  };
 }
 
-async function main(){
-  let cache = cachedApiCall(1500);
+function solve() {
+  const call = cachedApiCall(1500);
 
-  let res1 = await cache(URL);
-  console.log(res1);
+  call("https://jsonplaceholder.typicode.com/todos/1").then((a) =>
+    console.log(a)
+  );
 
-  let res2 = await cache(URL);
-  console.log(res2);
+  setTimeout(() => {
+    call("https://jsonplaceholder.typicode.com/todos/1").then((a) =>
+      console.log(a)
+    );
+  }, 700); // Should return cached response
 
-  let res3 = await cache(URL);
-  console.log(res3);
-
-  let res4 = await cache(URL);
-  console.log(res4);
-
-  setTimeout(async ()=>{
-    let res5 = await cache(URL);
-    console.log(res5);
-  },1000)
+  setTimeout(() => {
+    call("https://jsonplaceholder.typicode.com/todos/1").then((a) =>
+      console.log(a)
+    );
+  }, 2000); // Should make a new API call
 }
 
-main();
+solve();
