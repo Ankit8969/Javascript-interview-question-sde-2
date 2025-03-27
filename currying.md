@@ -1,11 +1,8 @@
-// Currying 
+# Currying 
+-  Currying takes a function that receives more than one parameter and breaks
+-  it into a series of unary functions.
+-  Therefore, curried functions takes only one argument
 
-// Currying takes a function that receives more than one parameter and breaks
-// it into a series of unary functions.
-
-// Therefore, curried functions takes only one argument
-
-// Eg: 
 
 ## Question and Solution
 ```
