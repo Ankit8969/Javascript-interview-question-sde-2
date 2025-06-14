@@ -1,3 +1,10 @@
+Object.assign => It is used to copy the properties of object
+
+OBject.create => It is used to set the prototype of object.
+
+
+
+
 const ingredientsList = ["noodles", { list: ["eggs", "flour", "water"] }];
 
 // Shallow Clone -> only direct child value, won't get change others will get change
