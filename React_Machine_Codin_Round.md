@@ -219,3 +219,6 @@ const [commentState, setCommentState] = useState([
   ]);
 ```
 
+## Star Rating
+- We need to use 3 listener
+- ***onClick*** , ***onMouseLeave***, ***onMouseEnter***
