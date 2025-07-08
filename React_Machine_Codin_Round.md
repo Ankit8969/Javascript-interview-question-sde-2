@@ -252,4 +252,68 @@ const [commentState, setCommentState] = useState([
   };
 ```
 
+## Infinite Scroll Bar
+- We have to use ***new IntersectionObserver()*** API to implement this.
+
+```
+
+export default function App() {
+  const [items, setItems] = useState(
+    Array(12)
+      .fill("")
+      .map((item, ind) => ind + 1)
+  );
+  const scrollableBoxRef = useRef();
+  const infiniteObserver = useRef();
+
+  const updateEntries = () => {
+    setItems((prevItems) => {
+      const nextItems = Array.from(
+        { length: 10 },
+        (_, ind) => prevItems.length + ind + 1
+      );
+      return [...prevItems, ...nextItems];
+    });
+  };
+
+  const getLastElement = () => {
+    let children = scrollableBoxRef.current.childNodes;
+    let len = children.length;
+    let lastElement = children[len - 1];
+    return lastElement;
+  };
+
+  useEffect(() => {
+    infiniteObserver.current = new IntersectionObserver((elements) => {
+      const lastElement = elements[0];
+      const { target, isIntersecting } = lastElement;
+      if (isIntersecting) {
+        infiniteObserver.current.unobserve(target);
+        updateEntries();
+      }
+    });
+
+    // cleanup call
+    return () => infiniteObserver.current.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (scrollableBoxRef.current) {
+      let lastElement = getLastElement();
+      infiniteObserver.current.observe(lastElement);
+    }
+  }, [items]);
+
+  return (
+    <React.Fragment>
+      <h2>Infinite Scroll</h2>
+      <div className="scroll_box" ref={scrollableBoxRef}>
+        {items.map((item, ind) => (
+          <div className="row">{ind + 1}</div>
+        ))}
+      </div>
+    </React.Fragment>
+  );
+}
+```
 
