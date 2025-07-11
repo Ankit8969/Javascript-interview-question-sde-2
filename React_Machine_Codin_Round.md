@@ -317,3 +317,91 @@ export default function App() {
 }
 ```
 
+## useFetch Custom Hook
+- ***Note-*** When a child component exposes its internal state to the parent (instead of returning JSX), any changes to that state will cause the parent component to re-render, as it becomes dependent on that state.
+
+- So, In the custom hooks this is what we are doing, because of this the parent component gets re-render automatically.
+
+### useFetch with debounce
+```
+import { useEffect, useState, useRef } from "react";
+
+const fetchData = async (updatedURL) => {
+  try {
+    const res = await fetch(updatedURL);
+    const jsonRes = await res.json();
+    const { products } = jsonRes;
+    return products;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const debounce = (fun, delay) => {
+  let timerId = null;
+  return function (...args) {
+    return new Promise((resolve, reject) => {
+      clearTimeout(timerId);
+      timerId = setTimeout(async () => {
+        let res = await fun(...args);
+        resolve(res);
+      }, delay);
+    });
+  };
+};
+
+const deboucedFun = debounce(fetchData, 1000);
+
+export const useFetch = (URL) => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    deboucedFun(URL)
+      .then((res) => {
+        setData(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+      });
+  }, [URL]);
+
+  return {
+    data,
+    loading,
+    error,
+  };
+};
+```
+
+
+### Parent Component
+```
+export default function App() {
+  const [text, setText] = useState("");
+  const URL = "https://dummyjson.com/products/search?q=" + text;
+
+  const { data: items, loading, error } = useFetch(URL);
+  return (
+    <div className="app">
+      <input
+        onChange={(e) => setText(e.target.value)}
+        type="text"
+        placeholder="Search products..."
+      />
+
+      <div className="search_result">
+        {loading && <p>Loading...</p>}
+        {error && <p style={{ color: "red" }}>Error fetching data</p>}
+        {items?.length > 0 &&
+          items?.map((item) => <p key={item.id}>{item.title}</p>)}
+      </div>
+    </div>
+  );
+}
+```
+
