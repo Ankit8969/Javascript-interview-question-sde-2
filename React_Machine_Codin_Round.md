@@ -405,3 +405,107 @@ export default function App() {
 }
 ```
 
+### Virtualization Table component
+```
+import React, { useEffect, useRef, useState } from "react";
+import "./styles.css";
+
+// Simulate fetching data in chunks
+const fetchData = (start = 0, limit = 30) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const newData = Array.from(
+        { length: limit },
+        (_, i) => `Item ${start + i + 1}`
+      );
+      resolve(newData);
+    }, 1000);
+  });
+};
+
+export default function App() {
+  const [items, setItems] = useState([]);
+  const [scrollTop, setScrollTop] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const containerRef = useRef();
+  const rowHeight = 40;
+  const visibleCount = 15;
+
+  useEffect(() => {
+    loadMore(); // initial fetch
+  }, []);
+
+  const loadMore = async () => {
+    if (loading) return;
+    setLoading(true);
+    const newItems = await fetchData(items.length, 30);
+    setItems((prev) => [...prev, ...newItems]);
+    if (newItems.length < 30) setHasMore(false);
+    setLoading(false);
+  };
+
+  const onScroll = (e) => {
+    const scrollTop = e.target.scrollTop; // how much we have scrolled from top.
+    setScrollTop(scrollTop);
+
+    const scrollHeight = e.target.scrollHeight; // Total height of the scroll container.
+    const clientHeight = e.target.clientHeight; // Window height
+
+    console.log({
+      scrollTop: scrollTop,
+      scrollHeight: scrollHeight,
+      clientHeight: clientHeight,
+    });
+
+    // Trigger loadMore when near bottom
+    if (scrollTop + clientHeight >= scrollHeight - 100) {
+      loadMore();
+    }
+  };
+
+  const startIdx = Math.floor(scrollTop / rowHeight);
+  const endIdx = Math.min(items.length - 1, startIdx + visibleCount);
+  const visibleItems = items.slice(startIdx, endIdx + 1);
+
+  const paddingTop = startIdx * rowHeight;
+  const paddingBottom = (items.length - endIdx - 1) * rowHeight;
+
+  return (
+    <div className="app">
+      <div
+        className="scroll-container"
+        onScroll={onScroll}
+        ref={containerRef}
+        style={{
+          height: `${visibleCount * rowHeight}px`,
+          overflowY: "auto",
+          border: "1px solid #ccc",
+        }}
+      >
+        <div style={{ paddingTop, paddingBottom }}>
+          {visibleItems.map((item, idx) => (
+            <div
+              className="row"
+              key={startIdx + idx}
+              style={{
+                height: `${rowHeight}px`,
+                display: "flex",
+                alignItems: "center",
+                borderBottom: "1px solid #eee",
+                paddingLeft: "10px",
+                backgroundColor: "#f9f9f9",
+              }}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+      {loading && <p>Loading more items...</p>}
+    </div>
+  );
+}
+
+```
+
