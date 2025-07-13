@@ -509,3 +509,96 @@ export default function App() {
 
 ```
 
+## Memory Game Flip
+<img width="343" height="345" alt="image" src="https://github.com/user-attachments/assets/8c56929c-c14c-4b8a-879b-b007c1589dcb" />
+```
+import React, { useEffect, useRef, useState } from "react";
+
+const getGameBox = (n) => {
+  let arr = Array.from({ length: (n * n) / 2 }).map((item, ind) => ind + 1);
+  let grid = [...arr, ...arr];
+  grid.sort(() => Math.random() - 0.5);
+  for (let i = 0; i < grid.length; i++) {
+    grid[i] = {
+      id: i,
+      number: grid[i],
+      isFlipped: false,
+    };
+  }
+  return grid;
+};
+
+const GameRow = ({ partiallySelected, item, handleFlip }) => {
+  let active = "";
+  if (partiallySelected.includes(item.id)) active = "active";
+  return (
+    <div onClick={handleFlip} className={`game_cell ${active}`}>
+      {item.isFlipped ? item.number : "?"}
+    </div>
+  );
+};
+
+const MemoryGame = () => {
+  const BOARD_SIZE = 4;
+  const [game, setGame] = useState(getGameBox(BOARD_SIZE));
+  const [partiallySelected, setPartiallySelected] = useState([]);
+  const [isLock, setIsLock] = useState(false);
+
+  const gridStyle = {
+    display: "grid",
+    gridTemplateColumns: `repeat(${BOARD_SIZE}, 80px)`,
+    gridTemplateRows: `repeat(${BOARD_SIZE}, 80px)`,
+  };
+
+  const handleFlip = (ind) => {
+    if (isLock || game[ind].isFlipped) return;
+    setGame((prev) => {
+      let copy = [...prev];
+      copy[ind].isFlipped = true;
+      return copy;
+    });
+    setPartiallySelected([...partiallySelected, ind]);
+  };
+
+  useEffect(() => {
+    if (partiallySelected.length === 2) {
+      const [x, y] = partiallySelected;
+      if (game[x].number !== game[y].number) {
+        setIsLock(true);
+        setTimeout(() => {
+          setGame((prev) => {
+            let gameCopy = [...prev];
+            gameCopy[x].isFlipped = false;
+            gameCopy[y].isFlipped = false;
+            return gameCopy;
+          });
+          setIsLock(false);
+          setPartiallySelected([]);
+        }, 3000);
+      } else {
+        setPartiallySelected([]);
+      }
+    }
+  }, [partiallySelected]);
+
+  return (
+    <React.Fragment>
+      <div style={gridStyle} className="game_board">
+        {game.map((item, rowIndex) => (
+          <GameRow
+            partiallySelected={partiallySelected}
+            key={rowIndex}
+            item={item}
+            handleFlip={() => handleFlip(rowIndex)}
+          />
+        ))}
+      </div>
+    </React.Fragment>
+  );
+};
+
+export default MemoryGame;
+```
+
+
+
