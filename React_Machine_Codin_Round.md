@@ -602,6 +602,10 @@ export default MemoryGame;
 ```
 
 ## Intermediate CheckBox problem
+
+<img width="640" height="617" alt="image" src="https://github.com/user-attachments/assets/7d4b8648-0b10-4028-8ab3-59e77f32e86a" />
+
+
 ```
 import React, { useEffect, useRef, useState } from "react";
 import "./styles.css";
@@ -684,7 +688,8 @@ let tempDeep = {
     },
   ],
 };
-
+```
+```
 const NestedCheckBox = ({ handleUpdate, checkBoxes }) => {
   return (
     <div>
