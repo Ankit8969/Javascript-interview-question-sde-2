@@ -601,5 +601,57 @@ const MemoryGame = () => {
 export default MemoryGame;
 ```
 
+## Intermediate CheckBox problem
+```
+let tempDeep = {
+  id: 1,
+  isSelected: false,
+  children: [
+    {
+      id: 2,
+      isSelected: false,
+      children: [
+        {
+          id: 3,
+          isSelected: true,
+          children: []
+        },
+        {
+          id: 4,
+          isSelected: true,
+          children: []
+        }
+      ]
+    },
+    {
+      id: 5,
+      isSelected: false,
+      children: []
+    }
+  ]
+};
+
+const dfs = (node) => {
+  // If no children, return the node's own isSelected status
+  if (!node.children || node.children.length === 0) {
+    return node.isSelected;
+  }
+
+  // Recursively check children
+  let allSelected = true;
+  for (let child of node.children) {
+    const childSelected = dfs(child);
+    allSelected = allSelected && childSelected;
+  }
+
+  // If all children are selected, mark this node as selected too
+  node.isSelected = allSelected;
+  return node.isSelected;
+};
+
+dfs(tempDeep);
+console.log(JSON.stringify(tempDeep, null, 2));
+```
+
 
 
