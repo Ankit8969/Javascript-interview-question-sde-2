@@ -603,54 +603,152 @@ export default MemoryGame;
 
 ## Intermediate CheckBox problem
 ```
+import React, { useEffect, useRef, useState } from "react";
+import "./styles.css";
+
 let tempDeep = {
   id: 1,
+  label: "Root Node",
   isSelected: false,
   children: [
     {
       id: 2,
+      label: "Level 1 - Child A",
       isSelected: false,
       children: [
         {
           id: 3,
-          isSelected: true,
-          children: []
+          label: "Level 2 - Child",
+          isSelected: false,
+          children: [
+            {
+              id: 4,
+              label: "Level 3 - Leaf",
+              isSelected: true,
+              children: [],
+            },
+            {
+              id: 5,
+              label: "Level 3 - Leaf",
+              isSelected: true,
+              children: [],
+            },
+          ],
         },
         {
-          id: 4,
+          id: 6,
+          label: "Level 2 - Leaf A2",
           isSelected: true,
-          children: []
-        }
-      ]
+          children: [],
+        },
+      ],
     },
     {
-      id: 5,
+      id: 7,
+      label: "Level 1 - Child B",
       isSelected: false,
-      children: []
+      children: [
+        {
+          id: 8,
+          label: "Level 2 - Child B1",
+          isSelected: false,
+          children: [
+            {
+              id: 9,
+              label: "Level 3 - Child",
+              isSelected: false,
+              children: [
+                {
+                  id: 10,
+                  label: "Level 4 - Leaf",
+                  isSelected: true,
+                  children: [],
+                },
+                {
+                  id: 11,
+                  label: "Level 4 - Leaf",
+                  isSelected: false,
+                  children: [],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 12,
+      label: "Level 1 - Leaf C",
+      isSelected: true,
+      children: [],
+    },
+  ],
+};
+
+const NestedCheckBox = ({ handleUpdate, checkBoxes }) => {
+  return (
+    <div>
+      <input
+        value={checkBoxes.isSelected}
+        type="checkbox"
+        checked={checkBoxes.isSelected}
+        name=""
+        id=""
+        onClick={() => handleUpdate(checkBoxes.id)}
+      />
+      <label htmlFor=""> {checkBoxes.label} </label>
+      <br />
+
+      {checkBoxes.children.map((item) => (
+        <NestedCheckBox handleUpdate={handleUpdate} checkBoxes={item} />
+      ))}
+    </div>
+  );
+};
+
+export default function App() {
+  const [checkBoxes, setCheckBoxes] = useState(tempDeep);
+
+  function selectCheckBox(obj, id, flag) {
+    for (let i = 0; i < obj.children.length; i++) {
+      obj.children[i].isSelected = flag;
     }
-  ]
-};
 
-const dfs = (node) => {
-  // If no children, return the node's own isSelected status
-  if (!node.children || node.children.length === 0) {
-    return node.isSelected;
+    return obj;
   }
 
-  // Recursively check children
-  let allSelected = true;
-  for (let child of node.children) {
-    const childSelected = dfs(child);
-    allSelected = allSelected && childSelected;
+  function dfs(obj, id, isDecendent, parentValue) {
+    if (obj.id === id) {
+      obj.isSelected = !obj.isSelected;
+    }
+    if (isDecendent) {
+      obj.isSelected = parentValue;
+    }
+    if (obj.children.length === 0) return obj.isSelected;
+
+    let allSelected = true;
+    for (let i = 0; i < obj.children.length; i++) {
+      dfs(obj.children[i], id, obj.id === id || isDecendent, obj.isSelected);
+    }
+
+    return allSelected;
   }
 
-  // If all children are selected, mark this node as selected too
-  node.isSelected = allSelected;
-  return node.isSelected;
-};
+  const handleUpdate = (id) => {
+    console.log("ID: ", id);
+    let temp = structuredClone(checkBoxes);
+    // First select the checkbox of all its children
+    dfs(temp, id);
+    setCheckBoxes({ ...temp });
+  };
 
-dfs(tempDeep);
-console.log(JSON.stringify(tempDeep, null, 2));
+  return (
+    <div className="stepper">
+      <NestedCheckBox handleUpdate={handleUpdate} checkBoxes={checkBoxes} />
+    </div>
+  );
+}
+
 ```
 
 
