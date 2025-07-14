@@ -607,9 +607,6 @@ export default MemoryGame;
 
 
 ```
-import React, { useEffect, useRef, useState } from "react";
-import "./styles.css";
-
 let tempDeep = {
   id: 1,
   label: "Root Node",
@@ -628,13 +625,13 @@ let tempDeep = {
             {
               id: 4,
               label: "Level 3 - Leaf",
-              isSelected: true,
+              isSelected: false,
               children: [],
             },
             {
               id: 5,
               label: "Level 3 - Leaf",
-              isSelected: true,
+              isSelected: false,
               children: [],
             },
           ],
@@ -642,7 +639,7 @@ let tempDeep = {
         {
           id: 6,
           label: "Level 2 - Leaf A2",
-          isSelected: true,
+          isSelected: false,
           children: [],
         },
       ],
@@ -665,7 +662,7 @@ let tempDeep = {
                 {
                   id: 10,
                   label: "Level 4 - Leaf",
-                  isSelected: true,
+                  isSelected: false,
                   children: [],
                 },
                 {
@@ -683,7 +680,7 @@ let tempDeep = {
     {
       id: 12,
       label: "Level 1 - Leaf C",
-      isSelected: true,
+      isSelected: false,
       children: [],
     },
   ],
@@ -710,18 +707,12 @@ const NestedCheckBox = ({ handleUpdate, checkBoxes }) => {
     </div>
   );
 };
-
+```
+```
 export default function App() {
   const [checkBoxes, setCheckBoxes] = useState(tempDeep);
 
-  function selectCheckBox(obj, id, flag) {
-    for (let i = 0; i < obj.children.length; i++) {
-      obj.children[i].isSelected = flag;
-    }
-
-    return obj;
-  }
-
+  // This function will be responsible for If the parent is selected the select all the descendants 
   function dfs(obj, id, isDecendent, parentValue) {
     if (obj.id === id) {
       obj.isSelected = !obj.isSelected;
@@ -734,16 +725,27 @@ export default function App() {
     let allSelected = true;
     for (let i = 0; i < obj.children.length; i++) {
       dfs(obj.children[i], id, obj.id === id || isDecendent, obj.isSelected);
+      allSelected = allSelected & obj.isSelected;
     }
+    obj.isSelected = allSelected;
+    return allSelected;
+  }
 
+  // This will update the checkBox, if all the children is selected the select the parent also.
+  function dfs2(obj) {
+    if (obj.children.length === 0) return obj.isSelected;
+    let allSelected = true;
+    for (let i = 0; i < obj.children.length; i++) {
+      allSelected = allSelected && dfs2(obj.children[i]);
+    }
+    obj.isSelected = allSelected;
     return allSelected;
   }
 
   const handleUpdate = (id) => {
-    console.log("ID: ", id);
     let temp = structuredClone(checkBoxes);
-    // First select the checkbox of all its children
-    dfs(temp, id);
+    dfs(temp, id); // select all the children
+    dfs2(temp); // If all children selected then select parent also
     setCheckBoxes({ ...temp });
   };
 
