@@ -412,51 +412,42 @@ export default function App() {
 
 ### useFetch with debounce
 ```
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const fetchData = async (updatedURL) => {
+function debounce(cb, delay) {
+  let timerId;
+  return function (...args) {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      cb(...args);
+    }, delay);
+  };
+}
+
+const fetchData = async (url, setData, setError, setLoading) => {
   try {
-    const res = await fetch(updatedURL);
-    const jsonRes = await res.json();
-    const { products } = jsonRes;
-    return products;
+    setLoading(true);
+    const response = await fetch(url);
+    const jsonData = await response.json();
+    const { products } = jsonData;
+    setData(products);
   } catch (err) {
-    throw err;
+    setError("Failed to get data");
+  } finally {
+    setLoading(false);
   }
 };
 
-const debounce = (fun, delay) => {
-  let timerId = null;
-  return function (...args) {
-    return new Promise((resolve, reject) => {
-      clearTimeout(timerId);
-      timerId = setTimeout(async () => {
-        let res = await fun(...args);
-        resolve(res);
-      }, delay);
-    });
-  };
-};
-
-const deboucedFun = debounce(fetchData, 1000);
-
-export const useFetch = (URL) => {
+export const useFetch = function (url) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
+
+  const debouncedFetch = useRef(debounce(fetchData, 1000));
 
   useEffect(() => {
-    setLoading(true);
-    deboucedFun(URL)
-      .then((res) => {
-        setData(res);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err);
-        setLoading(false);
-      });
-  }, [URL]);
+    debouncedFetch.current(url, setData, setError, setLoading);
+  }, [url]);
 
   return {
     data,
@@ -464,6 +455,7 @@ export const useFetch = (URL) => {
     error,
   };
 };
+
 ```
 
 
