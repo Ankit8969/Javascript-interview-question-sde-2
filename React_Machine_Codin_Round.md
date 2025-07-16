@@ -1,4 +1,8 @@
 ## Dragable Component
+
+<img width="949" height="738" alt="image" src="https://github.com/user-attachments/assets/2dd432ad-1339-4fad-9ab4-21f45f320a8d" />
+
+
 The following property should be added directly to the item itself.
 - Setting ```draggable={true}``` will enable the element to be draggable.
 - Once enabled, the element will support two key handlers: ```onDragStart={handler}``` and ```onDragEnd={handler}```.
@@ -22,6 +26,90 @@ The following property should be added directly to the item itself.
       "New Customer on-boarded",
     ],
   };
+```
+
+```
+import React, { useRef, useState } from "react";
+import "./styles.css";
+
+/* ---------- sample data ---------- */
+const initialData = {
+  Todo: ["Learning JS", "Learning React", "Learning CSS"],
+  Active: ["Making Project", "Searching Project", "Doing JOBS"],
+  Done: ["React Done", "Project done"],
+};
+
+function DragSection({ columnKey, items, onDragStart, onDrop }) {
+  const allowDrop = (e) => e.preventDefault();
+
+  return (
+    <div
+      className="column"
+      onDragOver={allowDrop}
+      onDrop={() => onDrop(columnKey)}
+    >
+      <h4>{columnKey}</h4>
+
+      {items.map((text) => (
+        <div
+          key={text}
+          className="card"
+          draggable
+          onDragStart={() => onDragStart(columnKey, text)}
+        >
+          {text}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function App() {
+  const [data, setData] = useState(initialData);
+
+  const dragItem = useRef(null);
+
+  /* start dragging ------------------------------------------------------- */
+  const handleDragStart = (fromColumn, itemText) => {
+    dragItem.current = { fromColumn, itemText };
+  };
+
+  /* drop on a column ----------------------------------------------------- */
+  const handleDrop = (toColumn) => {
+    const { fromColumn, itemText } = dragItem.current || {};
+    if (!itemText || fromColumn === toColumn) return; // nothing to do
+
+    setData((prev) => {
+      // remove from old column
+      const fromItems = prev[fromColumn].filter((t) => t !== itemText);
+      // add to new column
+      const toItems = [...prev[toColumn], itemText];
+
+      return {
+        ...prev,
+        [fromColumn]: fromItems,
+        [toColumn]: toItems,
+      };
+    });
+
+    dragItem.current = null; // reset
+  };
+
+  /* render --------------------------------------------------------------- */
+  return (
+    <section className="board">
+      {Object.keys(data).map((column) => (
+        <DragSection
+          key={column}
+          columnKey={column}
+          items={data[column]}
+          onDragStart={handleDragStart}
+          onDrop={handleDrop}
+        />
+      ))}
+    </section>
+  );
+}
 ```
 
 
