@@ -3,6 +3,12 @@
 <img width="467" height="506" alt="image" src="https://github.com/user-attachments/assets/aaadd038-425f-4b09-abdf-782a11165baf" />
 
 
+## Star Rating
+<img width="629" height="269" alt="image" src="https://github.com/user-attachments/assets/037f193f-c359-4a90-81e5-bf23780805a2" />
+
+- We need to use 3 listener
+- ***onClick*** , ***onMouseLeave***, ***onMouseEnter***
+
 
 ## Dragable Component
 
@@ -313,10 +319,6 @@ const [commentState, setCommentState] = useState([
   ]);
 ```
 
-## Star Rating
-- We need to use 3 listener
-- ***onClick*** , ***onMouseLeave***, ***onMouseEnter***
-- 
 
 ## OTP Boxes
 - To Implement this , we have few requirements like auto-focus and one box has one text
