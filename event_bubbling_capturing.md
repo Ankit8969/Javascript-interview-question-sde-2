@@ -3,6 +3,10 @@
 determines how events flow through the DOM when a user interacts with elements.
   - Event Bubbling: The event starts from the target element and propagates up through its ancestors (parent, grandparent, etc.).
   - Event Capturing (or Event Trickling): The event starts from the root of the DOM and propagates down to the target element.
+ 
+
+***By default, the third parameter (useCapture) in addEventListener is false.***
+  
  ```
 const parentDiv = document.querySelector('.parent');
 const childButton = document.querySelector('.child');
