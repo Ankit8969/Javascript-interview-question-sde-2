@@ -10,6 +10,38 @@
 - ***onClick*** , ***onMouseLeave***, ***onMouseEnter***
 
 
+## OTP Boxes
+- To Implement this , we have few requirements like auto-focus and one box has one text
+- In ```input``` we need to pass few attribute like ```maxLength={1}```
+- For auto focus, we need to use the same length array of with the help of ```useRef```
+- ```onChange``` will take care the number press but for key press we hav to use ```onKeyDown```
+
+<img width="601" height="144" alt="image" src="https://github.com/user-attachments/assets/25d0cc42-6e88-42ef-bdbf-78e1619ae42c" />
+
+
+```
+  const handleKeyDown = (e, ind) => {
+    console.log("Test");
+    if (e.key === "Backspace") {
+      if (boxes[ind]) {
+        const newBoxes = [...boxes];
+        newBoxes[ind] = "";
+        setBoxes(newBoxes);
+      } else if (ind > 0) {
+        boxesRef.current[ind - 1]?.focus();
+        const newBoxes = [...boxes];
+        newBoxes[ind - 1] = "";
+        setBoxes(newBoxes);
+      }
+    } else if (e.key === "ArrowLeft" && ind > 0) {
+      boxesRef.current[ind - 1]?.focus();
+    } else if (e.key === "ArrowRight" && ind < 4) {
+      boxesRef.current[ind + 1]?.focus();
+    }
+  };
+```
+
+
 ## Dragable Component
 
 <img width="949" height="738" alt="image" src="https://github.com/user-attachments/assets/2dd432ad-1339-4fad-9ab4-21f45f320a8d" />
@@ -317,35 +349,6 @@ const [commentState, setCommentState] = useState([
       ],
     },
   ]);
-```
-
-
-## OTP Boxes
-- To Implement this , we have few requirements like auto-focus and one box has one text
-- In ```input``` we need to pass few attribute like ```maxLength={1}```
-- For auto focus, we need to use the same length array of with the help of ```useRef```
-- ```onChange``` will take care the number press but for key press we hav to use ```onKeyDown```
-
-```
-  const handleKeyDown = (e, ind) => {
-    console.log("Test");
-    if (e.key === "Backspace") {
-      if (boxes[ind]) {
-        const newBoxes = [...boxes];
-        newBoxes[ind] = "";
-        setBoxes(newBoxes);
-      } else if (ind > 0) {
-        boxesRef.current[ind - 1]?.focus();
-        const newBoxes = [...boxes];
-        newBoxes[ind - 1] = "";
-        setBoxes(newBoxes);
-      }
-    } else if (e.key === "ArrowLeft" && ind > 0) {
-      boxesRef.current[ind - 1]?.focus();
-    } else if (e.key === "ArrowRight" && ind < 4) {
-      boxesRef.current[ind + 1]?.focus();
-    }
-  };
 ```
 
 ## Infinite Scroll Bar
