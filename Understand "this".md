@@ -286,3 +286,49 @@ check4: () => {
 
 
 
+
+### Question 
+```
+const obj = {
+    text: 'LOGGING',
+    list: ['1', '2', '3'],
+    log() {
+        this.list.forEach(function (item) {
+            console.log(this.text + item);
+        });
+    },
+    log2() {
+        this.list.forEach((item) =>  {
+            console.log(this.text + item);
+        });
+    },
+};
+obj.log()
+obj.log2();
+```
+
+### Output
+```
+undefined1
+undefined2
+undefined3
+LOGGING1
+LOGGING2
+LOGGING3
+```
+## Explanation
+- For first case, we are getting undefind because, for log() we have regular function, this has its own "this" that's why
+- But for second case, arrow function doesn't have its own this, and it inherits from where it defined.
+ 
+
+
+
+
+
+
+
+
+
+
+
+
