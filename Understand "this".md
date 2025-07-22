@@ -1,3 +1,18 @@
+
+## Important Points for this
+- ***this substitution*** is happening if the value of ***this*** keyword is undefined or null, this will replaced with global object only in ***non-script*** mode
+- value of ```this``` depend how function is called.
+- Diff b'w function and method
+- When we are writting the function inside object, then that is method
+- And when we writing normal function, that is function
+- call, apply and bind these are share method
+
+
+
+
+
+
+
 ## Example - 1
 
 ```
