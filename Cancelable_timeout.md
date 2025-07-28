@@ -1,4 +1,6 @@
+# Cancelable Timeout
 
+```
 function cancelableTimeout(timer) {
   let cancelID = null;
   cancelID = setTimeout(() => {
@@ -13,9 +15,12 @@ function cancelableTimeout(timer) {
     }
   }
 }
+```
 
+```
 let cancelFun = cancelableTimeout(3000);
 
 setTimeout(() => {
   cancelFun();
 }, 2000)
+```

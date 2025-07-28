@@ -1,3 +1,6 @@
+# Deep Equal 
+
+```
 function compareDeepEqual(obj1, obj2) {
   if (typeof obj1 != 'object' || typeof obj1 === undefined)  
     return obj1 === obj2;
@@ -23,6 +26,10 @@ function compareDeepEqual(obj1, obj2) {
 
   return true;
 }
+```
+
+```
+Example: 
 
 const obj1 = {
   name: "John",
@@ -49,13 +56,17 @@ const obj2 = {
   },
   hobbies: ["reading", "travelling", "testing"]
 };
+```
+
+```
+Calling Function: 
 
 if (compareDeepEqual(obj1, obj2)) {
   console.log("Both are deep equal");
 }else {
   console.log("Both are not deep equal");
 }
-
+```
 
 
 
