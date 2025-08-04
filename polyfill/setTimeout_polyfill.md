@@ -41,7 +41,6 @@ Note: ***If the tab is inactive, the browser will pause requestAnimationFrame to
 Now, we can start implementing the setTimeOut
 
 ```
-
 function mySetTimeout(cb, delay, ...args) {
   if (typeof cb !== "function") throw new Error("Callback must be a function");
   if (delay < 0) throw new Error("Delay must be greater than zero");
@@ -60,6 +59,7 @@ function mySetTimeout(cb, delay, ...args) {
   return timerId;
 }
 ```
+
 ```
 mySetTimeout(
   (...args) => {
@@ -69,5 +69,4 @@ mySetTimeout(
   1,
   2
 );
-
 ```
