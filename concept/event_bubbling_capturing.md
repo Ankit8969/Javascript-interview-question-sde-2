@@ -57,3 +57,45 @@ Order of Execution:
 - When capturing is enabled, the event will first trigger in the capture phase (from the outermost ancestor to the target).
 - Then, the bubbling phase begins, and the event propagates back up from the target to the outer ancestors.
 - This shows how events move through the DOM, starting either from the top (capturing) or from the target (bubbling).
+
+
+### Difference b/w ```event.stopPropagation()``` and ```event.stopImmediatePropagation()```
+
+1. ```event.stopPropagation()```
+- Stops the event from bubbling up (or further down if in capturing phase).
+- But it does NOT stop other event listeners on the same element from running.
+
+👉 Example:
+```
+div.addEventListener("click", () => console.log("div handler"));
+button.addEventListener("click", (e) => {
+  e.stopPropagation();
+  console.log("button handler");
+});
+
+```
+
+2. ```event.stopImmediatePropagation()```
+- Does everything that stopPropagation() does plus:
+- It also stops any other listeners on the same element from running.
+
+👉 Example:
+```
+button.addEventListener("click", () => console.log("handler 1"));
+button.addEventListener("click", (e) => {
+  e.stopImmediatePropagation();
+  console.log("handler 2");
+});
+button.addEventListener("click", () => console.log("handler 3"));
+```
+
+- If you click the button → only "handler 2" runs.
+- Handlers "handler 1" and "handler 3" are skipped, because ```stopImmediatePropagation``` stopped further execution at that level.
+
+
+✅ Summary
+
+```stopPropagation()``` → stops event from bubbling/capturing further. Other listeners on the same element still run.
+
+```stopImmediatePropagation()``` → stops event bubbling/capturing and prevents any other listeners on the same element from running.
+
