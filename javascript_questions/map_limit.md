@@ -3,39 +3,38 @@ mapLimit is a function that processes an array of items using an asynchronous fu
 
 
 ```
-
 const mapLimit = async (coll, limit, iteratee) => {
   const results = [];
   const executing = new Set();
 
   for (const item of coll) {
     const promise = iteratee(item);
-    promise.then((res) => {
-      results.push(res);
-    });
     executing.add(promise);
-
-    promise.finally(() => executing.delete(promise));
+    promise
+      .then((res) => {
+        results.push(res);
+      })
+      .finally(() => executing.delete(promise));
 
     if (executing.size >= limit) {
       await Promise.race(executing); // Wait for one of the promises to finish
     }
   }
-
-  return Promise.all(results); // Resolve all promises
+  await Promise.all(executing);
+  return results; // Resolve all promises
 };
 
-let arr = [1, 2, 3, 4];
+let arr = [1, 2, 3, 4, 5, 6];
 
 function fetch(id) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     setTimeout(() => {
       resolve(`${id} DONE`);
-    }, 1000 * id);
+    }, 100 * id);
   });
 }
 
-let temp = mapLimit(arr, 2, fetch).then((res) => {
+mapLimit(arr, 2, fetch).then((res) => {
   console.log(res);
 });
 
