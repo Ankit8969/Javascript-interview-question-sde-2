@@ -97,4 +97,4 @@ button.addEventListener("click", () => console.log("handler 3"));
 
 ```stopPropagation()``` → stops event from bubbling/capturing further. Other listeners on the same element still run.
 
-```stopImmediatePropagation()``` → stops event bubbling/capturing and prevents any other listeners on the same element from runnin
+```stopImmediatePropagation()``` → stops event bubbling/capturing and prevents any other listeners on the same element from running
