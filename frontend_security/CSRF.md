@@ -37,3 +37,58 @@ Example Attack Scenario
 ```
 <img src="https://bank.example.com/transfer?amount=1000&to=attacker" />
 ```
+
+
+## Ways to prevent from CSRF
+
+### 1. SameSite Cookie → Defends against CSRF
+- CSRF works because the browser automatically attaches cookies across sites.
+
+***If you mark your cookie as:***
+
+```
+Set-Cookie: sessionid=abc123; HttpOnly; Secure; SameSite=Strict
+```
+
+Then:
+```
+SameSite=Strict → Cookie is never sent on cross-origin requests.
+```
+```
+SameSite=Lax → Cookie is sent on top-level navigation only (like clicking a link), not on hidden POST requests or forms.
+```
+```
+SameSite=None; Secure → Cookie is always sent (but requires HTTPS).
+```
+
+👉 So SameSite stops CSRF because a malicious site (evil.com) cannot force your browser to attach your session cookie when sending requests to your site (bank.com).
+
+
+### 2. CSP → Defends against XSS, clickjacking, data exfiltration
+CSP doesn’t prevent CSRF directly, but it complements SameSite by:
+
+Blocking malicious inline scripts ```(script-src 'self')``` → stops injected JS from stealing tokens.
+
+Blocking ```<iframe>``` embedding ```(frame-ancestors 'none')``` → prevents clickjacking.
+
+Restricting where requests (images, scripts, forms, etc.) can be sent → makes data exfil harder.
+
+Example strong CSP:
+```
+Content-Security-Policy: 
+  default-src 'self';
+  script-src 'self';
+  style-src 'self';
+  img-src 'self';
+  font-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  frame-ancestors 'none';
+```
+
+### ✅ Together
+- SameSite cookies → kill CSRF
+
+- CSP headers → reduce XSS, clickjacking, and code injection.
+
+- They solve different problems but work great as a defense-in-depth strategy.
