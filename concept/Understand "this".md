@@ -9,8 +9,23 @@
 
 
 
+### Very Important Note
+- Arrow functions don’t have their own this.
+- They lexically capture this from the surrounding scope (where they are created).
+- So call, apply, or bind can’t change their this at all.
 
+```
+let obj = {
+  name: "Ankit",
+  arrow: (id) => {
+    console.log("arrow: ", this?.name);
+  },
+};
 
+let boundArrow = obj.arrow.bind({ name: "Rahul" });
+boundArrow(2); // Output: arrow: undefined
+
+```
 
 
 ## Example - 1
