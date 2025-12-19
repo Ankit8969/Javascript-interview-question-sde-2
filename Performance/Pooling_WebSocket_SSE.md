@@ -1,3 +1,11 @@
+# All these things we are using when we want real time updated in our app or service.
+EG: 
+- Messaging app
+- Stock trading platform
+- Notification service etc.
+
+
+
 # 🔹 1. Polling
 
 How it works: Client keeps sending requests every X seconds → “Do we have new posts?”
