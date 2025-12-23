@@ -18,5 +18,88 @@
 
 
 ### 🧠 What is Module Federation?
-Module Federation is a feature introduced in Webpack 5 that allows multiple independent builds (applications) to share code and load modules from each other at runtime.
+- With the help of MF we can use the microservice in frontend.
+- There are multiple way to achieve this, "React + Wepack" or "React-Vite + vite/module-federation", we can use
+- we can use iframe also to achieve micro frontend architecture.
+
+
+
+### Ways to share the data b/w the APPS
+1. We can share the data, as a props.
+2. We can create a shared context, and that we will expose to the 2nd one and use it.
+3. We can use Window Custom Event to share the updated b/w apps.
+
+
+- We can use this CLI to install the packages for vite - mf
+```
+npm add @module-federation/vite --save
+```
+
+
+### Vite Configuration of APP-1 (Parent App)
+
+```
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { federation } from '@module-federation/vite'
+
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
+    }),
+    federation({
+      name: 'app1',
+      filename: 'remoteEntry.js',
+      remotes: {
+        vite_provider_app2: {
+          type: 'module',
+          name: 'vite_provider_app2',
+          entry: 'http://localhost:5173/remoteEntry.js',
+        },
+      },
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+    }),
+  ],
+})
+
+```
+
+- This is how we can import the Component
+```
+const Button = React.lazy(() => import('vite_provider_app2/button'));
+```
+
+
+### Vite config of APP-2
+
+```
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { federation } from '@module-federation/vite';
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    react(),
+    federation({
+      name: 'vite_provider_app2',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './button': './src/button',
+      },
+      shared: {
+        react: { singleton: true },
+        'react-dom': { singleton: true },
+      },
+    }),
+  ],
+})
+
+```
 
