@@ -336,8 +336,21 @@ LOGGING3
 - But for second case, arrow function doesn't have its own this, and it inherits from where it defined.
  
 
+## Question 
+- ```this``` in JavaScript depends on how a function is invoked. When a method is passed as a callback or assigned to a variable, it loses its object context unless explicitly bound.
 
-
+```
+let obj = {
+  name: "Ankit",
+  age: 10,
+  getDetails: function () {
+    console.log(this.name, this.age);
+  },
+};
+let temp = obj.getDetails;
+temp();
+setTimeout(obj.getDetails, 2000);
+```
 
 
 
