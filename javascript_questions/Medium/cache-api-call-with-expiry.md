@@ -1,3 +1,5 @@
+## This will handle one only.
+```
 function cachedApiCall(timer) {
   let lastCallTime = 0; // Stores the last successful API call time
   let cachedRes = null; // Stores the cached response
@@ -44,3 +46,35 @@ function solve() {
 }
 
 solve();
+```
+
+## Handling the URL based 
+
+```
+function cacheApiCall(timeout) {
+  const cache = new Map();
+
+  return async function (url) {
+    const cached = cache.get(url);
+
+    if (cached && Date.now() - cached.time < timeout) {
+      return cached.data;
+    }
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      cache.set(url, { data, time: Date.now() });
+      return data;
+    } catch (err) {
+      return [];
+    }
+  };
+}
+
+```
+
+
+
+
+
