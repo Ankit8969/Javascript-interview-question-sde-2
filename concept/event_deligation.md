@@ -56,7 +56,13 @@ const VsCode = ({ folder }) => {
       <h3 data-title={folder.title} data-id={folder.id}>
         {folder.title}
       </h3>
-      <button value={folder.id} type="button" name="add" data-id={folder.id}>
+       <button
+        value={folder.id}
+        type="button"
+        data-name={folder.title}
+        name="add"
+        data-id={folder.id}
+      >
         Add
       </button>
       <div>
@@ -75,7 +81,12 @@ export default function App() {
   const handleClick = (e) => {
     if (e.target.nodeName === "H3") {
       console.log(e.target.getAttribute("data-title"));
-    } else console.log(e.target.getAttribute("data-id"));
+    } else {
+      console.log("ID: ", e.target.getAttribute("data-id"));
+      console.log("Value: ", e.target.getAttribute("value"));
+      console.log("Name: ", e.target.getAttribute("name"));
+      console.log("Title: ", e.target.getAttribute("data-name"));
+    }
   };
 
   return (
