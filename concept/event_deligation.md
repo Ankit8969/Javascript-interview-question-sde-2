@@ -41,3 +41,48 @@ addItemButton.addEventListener('click', function() {
 });
 
 ```
+
+
+## Example of Event deligation
+
+```
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import "./styles.css";
+import { folderStructure } from "./utils";
+
+const VsCode = ({ folder }) => {
+  return (
+    <div>
+      <h3 data-title={folder.title} data-id={folder.id}>
+        {folder.title}
+      </h3>
+      <button value={folder.id} type="button" name="add" data-id={folder.id}>
+        Add
+      </button>
+      <div>
+        {folder.children.map((item) => (
+          <VsCode key={item.id} folder={item} />
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+```
+export default function App() {
+  const [folder, setFolder] = useState(folderStructure);
+
+  const handleClick = (e) => {
+    if (e.target.nodeName === "H3") {
+      console.log(e.target.getAttribute("data-title"));
+    } else console.log(e.target.getAttribute("data-id"));
+  };
+
+  return (
+    <div onClick={handleClick}>
+      <VsCode folder={folder} />
+    </div>
+  );
+}
+
+```
