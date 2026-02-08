@@ -27,3 +27,14 @@ export const customMemo = (cb, dependencyArr) => {
 };
 
 ```
+
+### What will happen if you pass function in useMemo dependency array?
+
+***There are 2 case, one if the function inside the component and other is outside.***
+
+### Case - 1
+- If function is inside, and when the component is render it will initialize the same function again So the useMemo will consider every time as a new function. Then useMemo have no use.
+- But if we still want to keep the function inside the component we have to wrap the function inside the callback.
+
+### Case - 2
+- If function is outside then useMemo will cache the value.

@@ -2,41 +2,31 @@ A cancelable promise in JavaScript allows you to cancel or reject the promise ma
 
 
 ### CancelablePromise function
-
 ```
-function cancelablePromise(promise) {
-    let cancel;
-    const wrappedPromise = new Promise((resolve, reject) => {
-        cancel = () => reject(new Error("Promise canceled"));
-        promise.then(resolve).catch(reject);
-    });
+function cancelablePromise(prom) {
+  let cancel;
+  let hasCanceled = false;
+  let updatedPromise = new Promise((resolve, reject) => {
+    prom
+      .then((res) => {
+        if (hasCanceled) return;
+        resolve(res);
+      })
+      .catch((err) => {
+        if (hasCanceled) return;
+        reject(err);
+      });
+    cancel = () => reject("Rejecting the promise");
+  });
 
-    wrappedPromise.cancel = cancel;
-    return wrappedPromise;
+  updatedPromise.cancel = cancel;
+  return updatedPromise;
 }
 
-```
+let prom = new Promise((resolve, reject) => setTimeout(resolve, 2000, "Done"));
 
-```
-const myPromise = new Promise((resolve) => {
-    setTimeout(() => {
-        resolve("Completed");
-    }, 5000); // Resolves after 5 seconds
-});
+let updatedProm = cancelablePromise(prom);
+updatedProm.then(console.log).catch(console.log);
 
-const cancelable = cancelablePromise(myPromise);
-
-cancelable
-    .then((result) => {
-        console.log("Result:", result);
-    })
-    .catch((error) => {
-        console.error("Error:", error.message);
-    });
-
-// Cancel the promise after 2 seconds
-setTimeout(() => {
-    cancelable.cancel();
-}, 2000);
-
+updatedProm.cancel();
 ```
