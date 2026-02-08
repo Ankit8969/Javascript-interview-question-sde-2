@@ -35,26 +35,29 @@ Output:
 ```
 const filter = (s) => typeof s === "string";
 
-function filteredObj(obj) {
-  let keys = Object.keys(obj);
-  let temp = {};
-  keys.forEach((key) => {
-    if (typeof obj[key] === "object") {
-      temp = {
-        [key]: filteredObj(obj[key]),
-        ...temp,
-      };
-    } else {
-      if (filter(obj[key])) {
-        console.log(key, obj[key]);
-        temp = {
-          ...temp,
-          [key]: obj[key],
-        };
-      }
+function filterObj(obj, cb) {
+  // If value itself is valid, return it
+  if (cb(obj)) return obj;
+
+  // If not an object, discard it
+  if (typeof obj !== "object" || obj === null) return undefined;
+
+  const result = {};
+
+  for (const key in obj) {
+    const filteredValue = filterObj(obj[key], cb);
+
+    // Keep only valid or non-empty objects
+    if (
+      filteredValue !== undefined &&
+      (typeof filteredValue !== "object" ||
+        Object.keys(filteredValue).length > 0)
+    ) {
+      result[key] = filteredValue;
     }
-  });
-  return temp;
+  }
+
+  return Object.keys(result).length > 0 ? result : undefined;
 }
 
 let res = filteredObj(obj);
