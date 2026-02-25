@@ -30,3 +30,50 @@ updatedProm.then(console.log).catch(console.log);
 
 updatedProm.cancel();
 ```
+
+
+### Cancelable Promise with Timeout
+
+```
+
+// cancelablePromise with timeout
+
+function cancelablePromise(prom, timeout) {
+  return new Promise((resolve, reject) => {
+    let hasCancelled = false;
+    let timerId = setTimeout(() => {
+      hasCancelled = true;
+      reject("Cancelling the promise, due to timeout");
+    }, timeout);
+
+    Promise.resolve(prom)
+      .then((res) => {
+        if (hasCancelled) return;
+        clearTimeout(timerId);
+        hasCancelled = true;
+        resolve(res);
+      })
+      .catch((err) => {
+        if (hasCancelled) return;
+        clearTimeout(timerId);
+        hasCancelled = true;
+        reject(err);
+      });
+  });
+}
+
+let prom = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("resolved");
+  }, 5000);
+});
+
+cancelablePromise(prom, 4000)
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((err) => {
+    console.log("Err: ", err);
+  });
+
+```
