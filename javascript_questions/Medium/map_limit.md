@@ -61,3 +61,69 @@ mapLimit(promArr, 2).then((res) => {
     "Task - 6"
 ]
 ```
+
+
+
+### Way - 2
+
+```
+class MapLimit {
+  constructor(maxLimit) {
+    this.maxLimit = maxLimit;
+    this.executing = 0;
+    this.queue = [];
+  }
+
+  async execute(task, resolve, reject) {
+    this.executing++;
+
+    try {
+      const result = await task();
+      resolve(result);
+    } catch (err) {
+      reject(err);
+    } finally {
+      this.executing--;
+
+      if (this.queue.length > 0) {
+        const { task, resolve, reject } = this.queue.shift();
+        this.execute(task, resolve, reject);
+      }
+    }
+  }
+
+  call(task) {
+    return new Promise((resolve, reject) => {
+      if (this.executing < this.maxLimit) {
+        this.execute(task, resolve, reject);
+      } else {
+        this.queue.push({ task, resolve, reject });
+      }
+    });
+  }
+}
+
+
+let ml = new MapLimit(2);
+
+let prom1 = () =>
+  new Promise((resolve, reject) => setTimeout(resolve, 2000, "Task - 1"));
+let prom2 = () =>
+  new Promise((resolve, reject) => setTimeout(resolve, 1000, "Task - 2"));
+let prom3 = () =>
+  new Promise((resolve, reject) => setTimeout(resolve, 800, "Task - 3"));
+let prom4 = () =>
+  new Promise((resolve, reject) => setTimeout(resolve, 3000, "Task - 4"));
+let prom5 = () =>
+  new Promise((resolve, reject) => setTimeout(resolve, 4000, "Task - 5"));
+let prom6 = () =>
+  new Promise((resolve, reject) => setTimeout(resolve, 3800, "Task - 6"));
+
+ml.call(prom1).then(console.log);
+ml.call(prom2).then(console.log);
+ml.call(prom3).then(console.log);
+ml.call(prom4).then(console.log);
+ml.call(prom5).then(console.log);
+ml.call(prom6).then(console.log);
+
+```
