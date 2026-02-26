@@ -352,8 +352,25 @@ temp();
 setTimeout(obj.getDetails, 2000);
 ```
 
+### Question
+```
 
+var a = 10;
+var a = () =>{
+    console.log("A called")
+}
+a();
+```
 
+### Question
+```
+
+var a = 10;
+function a(){
+    console.log("A called")
+}
+a();
+```
 
 
 
