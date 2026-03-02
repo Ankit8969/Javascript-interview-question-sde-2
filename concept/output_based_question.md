@@ -68,19 +68,19 @@ console.log('23'/'2'); // 11.5
 # var , let and const
 
 ```
-console.log(x); // undefined
+console.log(x);
 var x = 2;
 var x = 3;
-console.log(x); // 3
+console.log(x);
 
 {
   var x = 4;
   var y = 5;
-  console.log(x); // 4
+  console.log(x);
 }
 
-console.log(y) // 5 
-console.log(x); // 4
+console.log(y)
+console.log(x);
 
 
 ```
@@ -88,16 +88,16 @@ console.log(x); // 4
 
 ```
 var x = 2;
-let x = 3; // error -> x already declared
+let x = 3;
 ```
 
 ```
 var x = 2;
 {
   let x = 3;
-  console.log(x); // 3
+  console.log(x);
 }
-console.log(x); // 2
+console.log(x);
 ```
 
 ```
@@ -108,11 +108,11 @@ function add(){
     let x = 3;
     let y = 5;
   }
-  console.log(x); // 2
+  console.log(x);
    console.log(y); //Reference Error: y is not defined
 }
 add();
-console.log(x); // 3
+console.log(x);
 
 ```
 
@@ -122,30 +122,30 @@ console.log(x); // 3
   let x= 3;
 }
 
-console.log(x); // Error: x is not defined
+console.log(x);
 ```
 
 - **Shadowing**
 ```
 var x = 2;
 if (true) {
-  let x = 5; // shadowing
+  let x = 5;
   console.log(x)
 }
 
 
 let x = 2;
 if (true) {
-  var x = 5; // illegal shadowing
+  var x = 5;
   console.log(x)
 }
 
 ```
 
 ```
-console.log(x);  // undefined
-console.log(y); // Reference Error: can't access y before initialization
-console.log(z); // same error as y due to TDZ
+console.log(x); 
+console.log(y);
+console.log(z);
 
 
 var x = 2
@@ -182,8 +182,6 @@ for (var i=0;i<5;i++){
     console.log(i);
   }, i*1000)
 }
-
-// Output: 5 5 5 5 5
 ```
 
 ```
@@ -193,7 +191,7 @@ for (let i=0;i<5;i++){
   }, i*1000)
 }
 
-// Output: 0 1 2 3 4
+
 
 ```
 
@@ -881,7 +879,30 @@ Finally Success - 9
 Success 7
 ```
 
+### Important Example
+```
+console.log("1");
 
+setTimeout(() => {
+  console.log("2");
+}, 0);
+
+async function check() {
+  console.log(3);
+  await Promise.resolve("");
+  console.log(4);
+}
+
+check()
+  .then((res) => {
+    console.log("5");
+  })
+  .then((res) => {
+    console.log("6");
+  });
+
+console.log("7");
+```
 
 
 
