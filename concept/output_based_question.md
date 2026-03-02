@@ -905,7 +905,30 @@ console.log("7");
 ```
 
 
+### Example - 2
+```
+console.log("1");
 
+setTimeout(() => {
+  console.log("2");
+}, 0);
+
+async function check() {
+  console.log(3);
+  await new Promise((resolve, reject) => setTimeout(resolve, 0));
+  console.log(4);
+}
+
+check()
+  .then((res) => {
+    console.log("5");
+  })
+  .then((res) => {
+    console.log("6");
+  });
+
+console.log("7");
+```
 
 
 
