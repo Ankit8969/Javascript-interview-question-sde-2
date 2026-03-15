@@ -1,129 +1,49 @@
 ## What is mapLimit?
 mapLimit is a function that processes an array of items using an asynchronous function but limits the number of concurrent executions. Instead of running all async operations at once (which could overwhelm the system), it ensures that only a specified number of tasks run at any given time.
 
-
 ```
 
-async function mapLimit(promArr, limit) {
-  let result = Array();
-  const executing = new Set();
+async function mapLimit(arr, maxLimit, cb) {
+  let pendingTask = [],
+    completed = 0,
+    onGoing = 0;
+  let result = [];
 
-  for (let i = 0; i < promArr.length; i++) {
-    const promise = promArr[i]();
-    executing.add(promise);
-
-    promise
-      .then((res) => {
-        result.push(res);
-      })
-      .finally(() => {
-        executing.delete(promise);
-      });
-
-    if (executing.size >= limit) {
-      await Promise.race(executing);
+  return new Promise((resolve, reject) => {
+    function execute(item) {
+      onGoing++;
+      cb(item)
+        .then((res) => {
+          result.push(res);
+        })
+        .finally(() => {
+          onGoing--;
+          completed++;
+          if (pendingTask.length > 0) execute(pendingTask.shift());
+          if (result.length === arr.length) resolve(result);
+        });
     }
-  }
 
-  await Promise.all(executing);
-  return result;
-}
-
-let prom1 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 2000, "Task - 1"));
-let prom2 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 1000, "Task - 2"));
-let prom3 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 800, "Task - 3"));
-let prom4 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 3000, "Task - 4"));
-let prom5 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 4000, "Task - 5"));
-let prom6 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 3800, "Task - 6"));
-
-let promArr = [prom1, prom2, prom3, prom4, prom5, prom6];
-
-mapLimit(promArr, 2).then((res) => {
-  console.log("%o", res);
-});
-
-```
-
-## Output
-```
-[
-    "Task - 2",
-    "Task - 3",
-    "Task - 1",
-    "Task - 4",
-    "Task - 5",
-    "Task - 6"
-]
-```
-
-
-
-### Way - 2
-
-```
-class MapLimit {
-  constructor(maxLimit) {
-    this.maxLimit = maxLimit;
-    this.executing = 0;
-    this.queue = [];
-  }
-
-  async execute(task, resolve, reject) {
-    this.executing++;
-
-    try {
-      const result = await task();
-      resolve(result);
-    } catch (err) {
-      reject(err);
-    } finally {
-      this.executing--;
-
-      if (this.queue.length > 0) {
-        const { task, resolve, reject } = this.queue.shift();
-        this.execute(task, resolve, reject);
-      }
-    }
-  }
-
-  call(task) {
-    return new Promise((resolve, reject) => {
-      if (this.executing < this.maxLimit) {
-        this.execute(task, resolve, reject);
+    for (let i = 0; i < arr.length; i++) {
+      if (onGoing >= maxLimit) {
+        pendingTask.push(arr[i]);
       } else {
-        this.queue.push({ task, resolve, reject });
+        execute(arr[i]);
       }
-    });
-  }
+    }
+  });
 }
 
+function asyncTask(n) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log("done", n);
+      resolve(n * 2);
+    }, 1000);
+  });
+}
 
-let ml = new MapLimit(2);
-
-let prom1 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 2000, "Task - 1"));
-let prom2 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 1000, "Task - 2"));
-let prom3 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 800, "Task - 3"));
-let prom4 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 3000, "Task - 4"));
-let prom5 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 4000, "Task - 5"));
-let prom6 = () =>
-  new Promise((resolve, reject) => setTimeout(resolve, 3800, "Task - 6"));
-
-ml.call(prom1).then(console.log);
-ml.call(prom2).then(console.log);
-ml.call(prom3).then(console.log);
-ml.call(prom4).then(console.log);
-ml.call(prom5).then(console.log);
-ml.call(prom6).then(console.log);
+mapLimit([1, 2, 3, 4, 5], 2, asyncTask).then(console.log);
 
 ```
+
