@@ -1,4 +1,100 @@
+## Intermediate Way 
+```
 
+async function flushEvent(events) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log("Event Flushed successfully:", events.length);
+      resolve();
+    }, 1000);
+  });
+}
+
+class MatricSDK {
+  constructor(config = {}) {
+    // Config
+    this.endPoint = config.endPoint;
+    this.batchSize = config.batchSize || 5;
+    this.flushInterval = config.flushInterval || 5000;
+    this.maxRetries = config.maxRetries || 2;
+
+    // State
+    this.queue = [];
+    this.timer = null;
+    this.isFlushing = false;
+  }
+
+  startTimer() {
+    if (this.timer) return;
+
+    this.timer = setTimeout(() => {
+      this.flush();
+    }, this.flushInterval);
+  }
+
+  track(event) {
+    const enhancedEvent = {
+      ...event,
+      timestamp: new Date().toISOString(),
+      id: Date.now(),
+    };
+
+    this.queue.push(enhancedEvent);
+
+    if (this.queue.length >= this.batchSize) {
+      this.flush();
+      return;
+    }
+
+    this.startTimer();
+  }
+
+  async flush(retryCount = 0) {
+    if (this.isFlushing) return;
+    if (this.queue.length === 0) return;
+
+    this.isFlushing = true;
+
+    const batch = [...this.queue];
+    this.queue = [];
+
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+
+    try {
+      await flushEvent(batch);
+    } catch (err) {
+      console.log("Flush failed:", err);
+
+      // 🔥 Retry logic
+      if (retryCount < this.maxRetries) {
+        console.log(`Retrying... (${retryCount + 1})`);
+
+        this.isFlushing = false;
+        return this.flush(retryCount + 1);
+      }
+
+      // ❌ Put events back if retries exhausted
+      this.queue = [...batch, ...this.queue];
+    } finally {
+      this.isFlushing = false;
+    }
+  }
+}
+
+```
+
+## Advance Way
+
+### 🧠 Why do we need sendBeacon?
+* Normally, when a user leaves a page:
+* Pending API calls may get cancelled ❌
+* Analytics / logs may be lost ❌
+
+### 👉 sendBeacon solves this by:
+***“Fire-and-forget data sending that continues even when the page is closing”***
 
 ```
 
