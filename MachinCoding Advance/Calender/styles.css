@@ -1,0 +1,225 @@
+.calendar-app {
+  max-width: 800px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.nav-btn:hover {
+  background: #0056b3;
+}
+
+.add-event-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.add-event-btn:hover {
+  background: #1e7e34;
+}
+
+.calendar-grid {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #f8f9fa;
+}
+
+.weekday {
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  border-right: 1px solid #ddd;
+}
+
+.weekday:last-child {
+  border-right: none;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-day {
+  min-height: 100px;
+  padding: 5px;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+}
+
+.calendar-day:nth-child(7n) {
+  border-right: none;
+}
+
+.calendar-day.today {
+  background: #e3f2fd;
+}
+
+.calendar-day.empty {
+  background: #f8f9fa;
+}
+
+.day-number {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.events-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.event-item {
+  background: #007bff;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  margin-left: 5px;
+}
+
+.delete-btn:hover {
+  color: #ff6b6b;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 5px;
+  width: 400px;
+  max-width: 90vw;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 15px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.modal-footer {
+  padding: 15px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.save-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background: #1e7e34;
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  border: 1px solid #f5c6cb;
+}
+
+.cancel-btn:hover {
+  background: #545b62;
+}
