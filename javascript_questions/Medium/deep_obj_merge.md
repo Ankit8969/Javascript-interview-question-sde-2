@@ -1,22 +1,21 @@
 ## Deep object merge
 
 ```
-function deepMerge(obj1, obj2){
-    let currentState = {...obj1};
-    
-    for(const key in obj2){
-        let val1 = obj1[key];
-        let val2 = obj2[key];
-        
-        // only object
-        if(typeof val1 === 'object' && typeof val2 === 'object') {
-            currentState[key] = deepMerge(obj1[key], obj2[key]);
-        }else {
-            currentState[key] = val2;
-        }
-    }
-    return currentState;
+function isObject(obj){
+    return obj && typeof obj === 'object' && !Array.isArray(obj);
 }
+
+function deepMerge(obj1, obj2){
+    let result = {...obj1};
+    for(const key in obj2){
+        if(obj1[key] && isObject(obj2[key]))
+            result[key] = deepMerge(obj1[key], obj2[key]);
+        else
+            result[key] = obj2[key];
+    }
+    return result;
+}
+
 ```
 
 ### Input
